@@ -13,6 +13,7 @@ namespace FinalCapstoneBackend.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
+            // This is test data.
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
