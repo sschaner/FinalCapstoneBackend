@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace FinalCapstoneBackend.DataTransferObjects.LocationApi
 {
-    public class LocationApiResult
+    public class Results
     {
-        public Results results { get; set; }
+        public Geometry geometry { get; set; }
     }
 }
