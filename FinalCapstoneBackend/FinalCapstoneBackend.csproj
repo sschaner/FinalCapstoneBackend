@@ -5,19 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DataTransferObjects\LocationApi\" />
-    <Folder Include="DataTransferObjects\WeatherApi\" />
-    <Folder Include="DataTransferObjects\TrailApi\" />
-    <Folder Include="DataTransferObjects\UserProfileContext\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Flurl.Http" Version="3.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.23" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.23">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DataTransferObjects\" />
   </ItemGroup>
 
 
