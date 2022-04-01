@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace FinalCapstoneBackend.DataTransferObjects.WeatherApi
 {
-    public class WeatherApiResult
+    public class Condition
     {
-        public LocationApiResult location { get; set; }
-        public CurrentApiResult current { get; set; }
+        public string text { get; set; }
+        public string icon { get; set; }
+        public int code { get; set; }
     }
 }
