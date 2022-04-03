@@ -13,30 +13,6 @@ namespace FinalCapstoneBackend.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-
-    /*
-        * 
-        * 
-        * THIS IS THE CODE TO RETURN STRING LATITUDE AND LONGITUDE BY CITY SEARCH TERM 
-        * 
-        * INPUT STRING SEARCHTERM 
-        * 
-        *  string locationApiUri = $"https://google-maps-geocoding.p.rapidapi.com/geocode/json?address={searchTerm}&language=en";
-           var locationApiTask = locationApiUri.WithHeaders(new
-           {
-               X_RapidAPI_Host = "google-maps-geocoding.p.rapidapi.com",
-               X_RapidAPI_Key = "13937aa023msh19be5d6e39cc704p1f331cjsnc968b519867a"
-           }).GetJsonAsync<LocationApiResult>();
-           locationApiTask.Wait();
-           string latitude = locationApiTask.Result.lat.ToString();
-           string longitude = locationApiTask.Result.lon.ToString();
-        * 
-        * 
-        * 
-        * 
-        * 
-        * 
-        */
     public class WeatherController : ControllerBase
     {
         //returns weather at a specified city api/<WeatherController>
@@ -52,24 +28,6 @@ namespace FinalCapstoneBackend.Controllers
             apiTask.Wait();
             WeatherApiResult result = apiTask.Result;
             return result;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-        // GET api/<WeatherController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
         }
     }
 }
