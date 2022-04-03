@@ -34,7 +34,7 @@ namespace FinalCapstoneBackend.Controllers
             using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
             {
                 result = context.Users.ToList();
-                user = result[id - 1];
+                user = result.Where(x => x.UserId == id).FirstOrDefault();
             }
 
             return user;
