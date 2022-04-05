@@ -66,9 +66,24 @@ namespace FinalCapstoneBackend.Controllers
 
         // GET api/<TrailController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IEnumerable<Trail> Get(int id)
         {
-            return "value";
+            //using given id with string interpolation to make uri for trail api call 
+            string trailApiUri = $"https://trailapi-trailapi.p.rapidapi.com/trails/{id}";
+
+            //calling trail api 
+            var trailApiTask = trailApiUri.WithHeaders(new
+            {
+                X_RapidAPI_Host = "trailapi-trailapi.p.rapidapi.com",
+                X_RapidAPI_Key = "13937aa023msh19be5d6e39cc704p1f331cjsnc968b519867a"
+            }).GetJsonAsync<TrailApiResult>();
+            trailApiTask.Wait();
+
+            //Get a list of a returned trail from api result and convert to a list
+            //The api for getting bike trail info returns a list, even though it's one trail
+            List<Trail>results = trailApiTask.Result.data.ToList();
+
+            return results;
         }
     }
 }
