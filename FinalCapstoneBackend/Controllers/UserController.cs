@@ -17,7 +17,7 @@ namespace FinalCapstoneBackend.Controllers
         public List<User> GetAllUsers()
         {
             List<User> result = null;
-            using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
+            using (UserContext context = new UserContext())
             {
                 result = context.Users.ToList();
             }
@@ -31,7 +31,7 @@ namespace FinalCapstoneBackend.Controllers
         {
             List<User> result = null;
             User user = null;
-            using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
+            using (UserContext context = new UserContext())
             {
                 result = context.Users.ToList();
                 user = result.Where(x => x.UserId == id).FirstOrDefault();
@@ -44,7 +44,7 @@ namespace FinalCapstoneBackend.Controllers
         [HttpPost]
         public User SaveUser(User user)
         {
-            using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
+            using (UserContext context = new UserContext())
             {
                 context.Users.Add(user);
                 context.SaveChanges();
@@ -63,7 +63,7 @@ namespace FinalCapstoneBackend.Controllers
         public User RemoveUserById(int id)
         {
             User user = new User();
-            using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
+            using (UserContext context = new UserContext())
             {
                 user = context.Users.Where(x => x.UserId == id).FirstOrDefault();
                 context.Users.Remove(user);
