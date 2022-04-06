@@ -19,7 +19,6 @@ namespace FinalCapstoneBackend.Controllers
 
         // GET: api/<TrailController>
         [HttpGet]
-       
         public IEnumerable<Trail> ReturnTrailsByCity(string searchTerm = "chicago")
         {
             //api uri to call weather api to retrieve latitude and longitude by using a city name as a search term 
