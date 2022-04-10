@@ -14,15 +14,48 @@ namespace FinalCapstoneBackend.Controllers
     {
         // GET: api/<UserController>
         [HttpGet]
-        public List<User> GetAllUsers()
+        //public List<User> GetAllUsers()
+        //{
+        //    List<User> result = null;
+        //    using (UserContext context = new UserContext())
+        //    {
+        //        result = context.Users.ToList();
+        //    }
+
+        //    return result;
+        //}
+        public User LogInUserByEmail(string searchTerm = "chicago")
         {
-            List<User> result = null;
+            User result = null;
             using (UserContext context = new UserContext())
             {
-                result = context.Users.ToList();
+                try
+                {
+                    result = context.Users.Where(x => x.Email.Trim().ToLower() == searchTerm.Trim().ToLower()).FirstOrDefault();
+                    return result;
+
+                }
+                catch (Exception)
+                {
+                    /*
+                     * 
+                     * this logic needs to be fixed here 
+                     * also probably should include something in post that saysa user with this email
+                     * already exists dont make this account 
+                     * 
+                     * 
+                     * 
+                     * 
+                     */
+                    throw new Exception();
+                }
             }
 
-            return result;
+           
+            
+
+
+
         }
 
         // GET api/<UserController>/5
