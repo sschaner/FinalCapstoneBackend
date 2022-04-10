@@ -1,4 +1,5 @@
-﻿using FinalCapstoneBackend.DataTransferObjects.TrailApi;
+﻿using FinalCapstoneBackend.DataTransferObjects;
+using FinalCapstoneBackend.DataTransferObjects.TrailApi;
 using FinalCapstoneBackend.DataTransferObjects.UserContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,14 +20,19 @@ namespace FinalCapstoneBackend.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Trail>> GetUserFavoriteTrails( int userId )
         {
-            List<FavoriteTrails> userFavorites = new List<FavoriteTrails>();
             List<Trail> favoriteTrails = new List<Trail>();
-            using (UserContext context = new UserContext())
+            using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
             {
+                var userFavorites = context.Users
+                    .Include(t => t.FavoriteTrails)
+                    .ThenInclude(x => x.Trail)
+                    .First(x => x.UserId = userId);
+                favoriteTrails = userFavorites.FavoriteTrails(x => x.Trail).ToList();
+
                 userFavorites = context.FavoriteTrails.Where(x => x.UserId == userId).ToList();
             }
 
-            return userFvorites
+            return favoriteTrails;
         }
 
         // GET api/<UserTrailController>/5
@@ -38,8 +44,25 @@ namespace FinalCapstoneBackend.Controllers
 
         // POST api/<UserTrailController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void UserFavoriteTrails(int userId, int trailId)
         {
+            User user = new User();
+            Trail trail = new Trail();
+
+            using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
+            {
+                user = context.Users.Where(x => x.UserId == userId).FirstOrDefault();
+                trail = context.Trails.Where(x => x.id == trailId).FirstOrDefault();
+                try
+                {
+                    context.FavoriteTrails.Add(new FavoriteTrails() { UserId = userId, User = user, TrailId = trailId, Trail = trail });
+                    context.SaveChanges();
+                }
+                catch (Exception)
+                {
+
+                }
+            }
         }
 
         // PUT api/<UserTrailController>/5

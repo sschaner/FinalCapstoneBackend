@@ -1,18 +1,19 @@
-﻿using System;
+﻿using FinalCapstoneBackend.DataTransferObjects.TrailApi;
+using FinalCapstoneBackend.DataTransferObjects.UserContext;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FinalCapstoneBackend.DataTransferObjects.TrailApi;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
-namespace FinalCapstoneBackend.DataTransferObjects.UserContext
+namespace FinalCapstoneBackend.DataTransferObjects
 {
-    public class UserContext: DbContext
+    public class FinalCapstoneBackendContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Trail> Trails { get; set; }
-        public DbSet<FavoriteTrail> FavoriteTrails { get; set; }
+        public DbSet<FavoriteTrails> FavoriteTrails { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
