@@ -18,7 +18,7 @@ namespace FinalCapstoneBackend.Controllers
     {
         // GET: api/<UserTrailController>
         [HttpGet]
-        public ActionResult<IEnumerable<FavoriteTrails>> GetUserFavoriteTrails( int userId )
+        public ActionResult<IEnumerable<FavoriteTrails>> GetUserFavoriteTrails(int userId)
         {
             List<FavoriteTrails> favoriteTrails = new List<FavoriteTrails>();
             using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
@@ -48,22 +48,19 @@ namespace FinalCapstoneBackend.Controllers
         [HttpPost]
         public void UserFavoriteTrails(int userId, int trailId)
         {
-            User user = new User();
-            Trail trail = new Trail();
-
+            // User user = new User();
+            //Trail trail = new Trail();
+            FavoriteTrails result = new FavoriteTrails();
             using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
             {
-                user = context.Users.Where(x => x.UserId == userId).FirstOrDefault();
-                trail = context.Trails.Where(x => x.id == trailId).FirstOrDefault();
-                try
-                {
-                    context.FavoriteTrails.Add(new FavoriteTrails() { UserId = userId, User = user, TrailId = trailId, Trail = trail });
-                    context.SaveChanges();
-                }
-                catch (Exception)
-                {
+                // user = context.Users.Where(x => x.UserId == userId).FirstOrDefault();
+                // trail = context.Trails.Where(x => x.id == trailId).FirstOrDefault();
+                result.UserId = userId;
+                result.TrailId = trailId;
 
-                }
+                context.FavoriteTrails.Add(result);
+                context.SaveChanges();
+
             }
         }
 
