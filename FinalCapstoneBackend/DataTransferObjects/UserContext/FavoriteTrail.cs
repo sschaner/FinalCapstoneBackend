@@ -14,8 +14,8 @@ namespace FinalCapstoneBackend.DataTransferObjects.UserContext
         
         [Required]
         public int UserId { get; set; }
-        [ForeignKey("UserId")]
-        public User user { get; set; }
+       // [ForeignKey("UserId")]
+        //public User user { get; set; }
         
         
         [Required]
