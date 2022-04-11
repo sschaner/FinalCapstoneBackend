@@ -18,18 +18,20 @@ namespace FinalCapstoneBackend.Controllers
     {
         // GET: api/<UserTrailController>
         [HttpGet]
-        public ActionResult<IEnumerable<Trail>> GetUserFavoriteTrails( int userId )
+        public ActionResult<IEnumerable<FavoriteTrails>> GetUserFavoriteTrails( int userId )
         {
-            List<Trail> favoriteTrails = new List<Trail>();
+            List<FavoriteTrails> favoriteTrails = new List<FavoriteTrails>();
             using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
             {
-                var userFavorites = context.Users
-                    .Include(t => t.FavoriteTrails)
-                    .ThenInclude(x => x.Trail)
-                    .First(x => x.UserId = userId);
-                favoriteTrails = userFavorites.FavoriteTrails(x => x.Trail).ToList();
 
-                userFavorites = context.FavoriteTrails.Where(x => x.UserId == userId).ToList();
+                favoriteTrails = context.FavoriteTrails.Where(x => x.UserId == userId).ToList();
+                //var userFavorites = context.Users
+                //    .Include(t => t.FavoriteTrails)
+                //    .ThenInclude(x => x.Trail)
+                //    .First(x => x.UserId = userId);
+                //favoriteTrails = userFavorites.FavoriteTrails(x => x.Trail).ToList();
+
+                //userFavorites = context.FavoriteTrails.Where(x => x.UserId == userId).ToList();
             }
 
             return favoriteTrails;
