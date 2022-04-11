@@ -18,14 +18,14 @@ namespace FinalCapstoneBackend.Controllers
     {
         // GET: api/<UserTrailController>
         [HttpGet]
-        public ActionResult<List<List<Trail>>> GetUserFavoriteTrails(int userId)
+        public ActionResult<List<Trail>> GetUserFavoriteTrails(int userId)
         {
             List<FavoriteTrail> favoriteTrails = new List<FavoriteTrail>();
             using (UserContext context = new UserContext())
             {
                 favoriteTrails = context.FavoriteTrails.Where(x => x.UserId == userId).ToList();
             }
-            List<List<Trail>> results = new List<List<Trail>>();
+            List<Trail> results = new List<Trail>();
 
 
             foreach (var trail in favoriteTrails)
@@ -44,7 +44,8 @@ namespace FinalCapstoneBackend.Controllers
                 //Get a list of a returned trail from api result and convert to a list
                 //The api for getting bike trail info returns a list, even though it's one trail
                 List<Trail> apiResult = trailApiTask.Result.data.ToList();
-                results.Add(apiResult);
+                Trail singleResult = apiResult[0];
+                results.Add(singleResult);
                 
 
             }
