@@ -18,6 +18,6 @@ namespace FinalCapstoneBackend.DataTransferObjects.UserContext
         public string LastName { get; set; }
         [Required]
         public string Email { get; set; }
-        public object FavoriteTrails { get; internal set; }
+       // public object FavoriteTrails { get; internal set; }
     }
 }

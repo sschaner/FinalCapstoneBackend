@@ -11,7 +11,7 @@ namespace FinalCapstoneBackend.DataTransferObjects.UserContext
     public class UserContext: DbContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<Trail> Trails { get; set; }
+        //public DbSet<Trail> Trails { get; set; }
         public DbSet<FavoriteTrail> FavoriteTrails { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

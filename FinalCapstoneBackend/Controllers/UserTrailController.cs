@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Flurl.Http;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FinalCapstoneBackend.Controllers
@@ -18,23 +18,38 @@ namespace FinalCapstoneBackend.Controllers
     {
         // GET: api/<UserTrailController>
         [HttpGet]
-        public ActionResult<IEnumerable<FavoriteTrails>> GetUserFavoriteTrails(int userId)
+        public ActionResult<List<List<Trail>>> GetUserFavoriteTrails(int userId)
         {
-            List<FavoriteTrails> favoriteTrails = new List<FavoriteTrails>();
-            using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
+            List<FavoriteTrail> favoriteTrails = new List<FavoriteTrail>();
+            using (UserContext context = new UserContext())
             {
-
                 favoriteTrails = context.FavoriteTrails.Where(x => x.UserId == userId).ToList();
-                //var userFavorites = context.Users
-                //    .Include(t => t.FavoriteTrails)
-                //    .ThenInclude(x => x.Trail)
-                //    .First(x => x.UserId = userId);
-                //favoriteTrails = userFavorites.FavoriteTrails(x => x.Trail).ToList();
+            }
+            List<List<Trail>> results = new List<List<Trail>>();
 
-                //userFavorites = context.FavoriteTrails.Where(x => x.UserId == userId).ToList();
+
+            foreach (var trail in favoriteTrails)
+            {
+                //using given id with string interpolation to make uri for trail api call 
+                string trailApiUri = $"https://trailapi-trailapi.p.rapidapi.com/trails/{trail.TrailId}";
+
+                //calling trail api 
+                var trailApiTask = trailApiUri.WithHeaders(new
+                {
+                    X_RapidAPI_Host = "trailapi-trailapi.p.rapidapi.com",
+                    X_RapidAPI_Key = "13937aa023msh19be5d6e39cc704p1f331cjsnc968b519867a"
+                }).GetJsonAsync<TrailApiResult>();
+                trailApiTask.Wait();
+
+                //Get a list of a returned trail from api result and convert to a list
+                //The api for getting bike trail info returns a list, even though it's one trail
+                List<Trail> apiResult = trailApiTask.Result.data.ToList();
+                results.Add(apiResult);
+                
+
             }
 
-            return favoriteTrails;
+            return results;
         }
 
         // GET api/<UserTrailController>/5
@@ -48,21 +63,16 @@ namespace FinalCapstoneBackend.Controllers
         [HttpPost]
         public void UserFavoriteTrails(int userId, int trailId)
         {
-            // User user = new User();
-            //Trail trail = new Trail();
-            FavoriteTrails result = new FavoriteTrails();
-            using (FinalCapstoneBackendContext context = new FinalCapstoneBackendContext())
+            FavoriteTrail trail = new FavoriteTrail();
+            using (UserContext context = new UserContext())
             {
-                // user = context.Users.Where(x => x.UserId == userId).FirstOrDefault();
-                // trail = context.Trails.Where(x => x.id == trailId).FirstOrDefault();
-                result.UserId = userId;
-                result.TrailId = trailId;
-
-                context.FavoriteTrails.Add(result);
+                trail.UserId = userId;
+                trail.TrailId = trailId.ToString();
+                context.FavoriteTrails.Add(trail);
                 context.SaveChanges();
-
             }
         }
+        
 
         // PUT api/<UserTrailController>/5
         [HttpPut("{id}")]
