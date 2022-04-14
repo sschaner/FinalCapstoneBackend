@@ -46,8 +46,6 @@ namespace FinalCapstoneBackend.Controllers
                 List<Trail> apiResult = trailApiTask.Result.data.ToList();
                 Trail singleResult = apiResult[0];
                 results.Add(singleResult);
-                
-
             }
 
             return results;
@@ -82,9 +80,18 @@ namespace FinalCapstoneBackend.Controllers
         }
 
         // DELETE api/<UserTrailController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public void Delete(int userId, int trailId)
         {
+            FavoriteTrail result = null;
+
+            using (UserContext context = new UserContext())
+            {
+                result = context.FavoriteTrails.Where(x => x.UserId == userId && x.TrailId == trailId.ToString()).First();
+                context.Remove(result);
+                context.SaveChanges();
+            }
+         
         }
     }
 }

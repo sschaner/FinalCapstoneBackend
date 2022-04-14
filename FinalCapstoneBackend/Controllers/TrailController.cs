@@ -54,15 +54,6 @@ namespace FinalCapstoneBackend.Controllers
             return results;
         }
 
-
-        /*
-         * 
-         * DO WE NEED THIS RETURN A SINGLE TRAIL METHOD HERE OR JUST THE RETURN LIST METHOD?
-         * 
-         * 
-         */
-
-
         // GET api/<TrailController>/5
         [HttpGet("{id}")]
         public IEnumerable<Trail> Get(int id)
