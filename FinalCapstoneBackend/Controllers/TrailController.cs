@@ -1,14 +1,11 @@
 ﻿using FinalCapstoneBackend.DataTransferObjects.TrailApi;
+using FinalCapstoneBackend.DataTransferObjects.WeatherApi;
+using Flurl.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Flurl.Http;
-using FinalCapstoneBackend.DataTransferObjects.WeatherApi;
-using FinalCapstoneBackend.DataTransferObjects.TrailApi;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FinalCapstoneBackend.Controllers
 {
@@ -24,11 +21,20 @@ namespace FinalCapstoneBackend.Controllers
             //api uri to call weather api to retrieve latitude and longitude by using a city name as a search term 
             string ApiUri = $"https://weatherapi-com.p.rapidapi.com/current.json?q={searchTerm}";
 
+            var builder = new ConfigurationBuilder();
+            builder.AddJsonFile("appsettings.json", optional: false);
+            var configuration = builder.Build();
+
+            var apiKey = configuration.GetValue<string>("ApiKeys:RapidApiKey");
+            var apiHostWeather = configuration.GetValue<string>("ApiKeys:RapidApiHostWeather");
+            var apiHostTrail = configuration.GetValue<string>("ApiKeys:RapidApiHostTrail");
+
+
             //calling the weather api
             var apiTask = ApiUri.WithHeaders(new
             {
-                X_RapidAPI_Host = "weatherapi-com.p.rapidapi.com",
-                X_RapidAPI_Key = "13937aa023msh19be5d6e39cc704p1f331cjsnc968b519867a"
+                X_RapidAPI_Host = apiHostWeather,
+                X_RapidAPI_Key = apiKey
             }).GetJsonAsync<WeatherApiResult>();
             apiTask.Wait();
 
@@ -42,8 +48,8 @@ namespace FinalCapstoneBackend.Controllers
             //calling trail api 
             var trailApiTask = trailApiUri.WithHeaders(new
             {
-                X_RapidAPI_Host = "trailapi-trailapi.p.rapidapi.com",
-                X_RapidAPI_Key = "13937aa023msh19be5d6e39cc704p1f331cjsnc968b519867a"
+                X_RapidAPI_Host = apiHostTrail,
+                X_RapidAPI_Key = apiKey
             }).GetJsonAsync<TrailApiResult>();
             trailApiTask.Wait();
 
@@ -58,20 +64,29 @@ namespace FinalCapstoneBackend.Controllers
         [HttpGet("{id}")]
         public IEnumerable<Trail> Get(int id)
         {
+
+            var builder = new ConfigurationBuilder();
+            builder.AddJsonFile("appsettings.json", optional: false);
+            var configuration = builder.Build();
+
+            var apiKey = configuration.GetValue<string>("ApiKeys:RapidApiKey");
+            var apiHostWeather = configuration.GetValue<string>("ApiKeys:RapidApiHostWeather");
+            var apiHostTrail = configuration.GetValue<string>("ApiKeys:RapidApiHostTrail");
+
             //using given id with string interpolation to make uri for trail api call 
             string trailApiUri = $"https://trailapi-trailapi.p.rapidapi.com/trails/{id}";
 
             //calling trail api 
             var trailApiTask = trailApiUri.WithHeaders(new
             {
-                X_RapidAPI_Host = "trailapi-trailapi.p.rapidapi.com",
-                X_RapidAPI_Key = "13937aa023msh19be5d6e39cc704p1f331cjsnc968b519867a"
+                X_RapidAPI_Host = apiHostTrail,
+                X_RapidAPI_Key = apiKey
             }).GetJsonAsync<TrailApiResult>();
             trailApiTask.Wait();
 
             //Get a list of a returned trail from api result and convert to a list
             //The api for getting bike trail info returns a list, even though it's one trail
-            List<Trail>results = trailApiTask.Result.data.ToList();
+            List<Trail> results = trailApiTask.Result.data.ToList();
 
             return results;
         }

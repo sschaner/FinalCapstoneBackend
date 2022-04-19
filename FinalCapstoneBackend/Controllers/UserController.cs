@@ -1,10 +1,7 @@
-﻿using FinalCapstoneBackend.DataTransferObjects;
-using FinalCapstoneBackend.DataTransferObjects.UserContext;
+﻿using FinalCapstoneBackend.DataTransferObjects.UserContext;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace FinalCapstoneBackend.Controllers
 {
@@ -14,48 +11,14 @@ namespace FinalCapstoneBackend.Controllers
     {
         // GET: api/<UserController>
         [HttpGet]
-        //public List<User> GetAllUsers()
-        //{
-        //    List<User> result = null;
-        //    using (UserContext context = new UserContext())
-        //    {
-        //        result = context.Users.ToList();
-        //    }
-
-        //    return result;
-        //}
-        public User LogInUserByEmail(string searchTerm = "chicago")
+        public User LogInUserByEmail(string searchTerm)
         {
             User result = null;
             using (UserContext context = new UserContext())
             {
-                try
-                {
-                    result = context.Users.Where(x => x.Email.Trim().ToLower() == searchTerm.Trim().ToLower()).FirstOrDefault();
-                    return result;
-
-                }
-                catch (Exception)
-                {
-                    /*
-                     * 
-                     * this logic needs to be fixed here 
-                     * also probably should include something in post that saysa user with this email
-                     * already exists dont make this account 
-                     * 
-                     * 
-                     * 
-                     * 
-                     */
-                    throw new Exception();
-                }
+                result = context.Users.Where(x => x.Email.Trim().ToLower() == searchTerm.Trim().ToLower()).FirstOrDefault();
+                return result;
             }
-
-           
-            
-
-
-
         }
 
         // GET api/<UserController>/5
@@ -93,7 +56,7 @@ namespace FinalCapstoneBackend.Controllers
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public User RemoveUserById(int id)
+        public void RemoveUserById(int id)
         {
             User user = new User();
             using (UserContext context = new UserContext())
@@ -102,7 +65,6 @@ namespace FinalCapstoneBackend.Controllers
                 context.Users.Remove(user);
                 context.SaveChanges();
             }
-            return user;
         }
     }
 }
