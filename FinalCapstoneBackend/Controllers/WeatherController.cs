@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FinalCapstoneBackend.DataTransferObjects.WeatherApi;
+﻿using FinalCapstoneBackend.DataTransferObjects.WeatherApi;
 using Flurl.Http;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace FinalCapstoneBackend.Controllers
 {
@@ -19,11 +14,19 @@ namespace FinalCapstoneBackend.Controllers
         [HttpGet]
         public WeatherApiResult ReturnCurrentWeatherByCity(string searchTerm = "chicago")
         {
+
+            var builder = new ConfigurationBuilder();
+            builder.AddJsonFile("appsettings.json", optional: false);
+            var configuration = builder.Build();
+
+            var apiKey = configuration.GetValue<string>("ApiKeys:RapidApiKey");
+            var apiHostWeather = configuration.GetValue<string>("ApiKeys:RapidApiHostWeather");
+
             string ApiUri = $"https://weatherapi-com.p.rapidapi.com/current.json?q={searchTerm}";
             var apiTask = ApiUri.WithHeaders(new
             {
-                X_RapidAPI_Host = "weatherapi-com.p.rapidapi.com",
-                X_RapidAPI_Key = "13937aa023msh19be5d6e39cc704p1f331cjsnc968b519867a"
+                X_RapidAPI_Host = apiHostWeather,
+                X_RapidAPI_Key = apiKey
             }).GetJsonAsync<WeatherApiResult>();
             apiTask.Wait();
             WeatherApiResult result = apiTask.Result;
